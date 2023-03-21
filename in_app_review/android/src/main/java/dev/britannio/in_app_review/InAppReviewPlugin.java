@@ -175,7 +175,13 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         if (noContextOrActivity(result)) return;
 
         Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
-        flow.addOnCompleteListener(task -> result.success(null));
+        flow.addOnCompleteListener(task -> result.success(null)).
+                addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(Exception e) {
+                        Toast.makeText(MainActivity.this, "Rating Failed", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private boolean isPlayStoreInstalled() {
