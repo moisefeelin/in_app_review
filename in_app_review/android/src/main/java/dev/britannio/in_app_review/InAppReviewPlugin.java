@@ -11,6 +11,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
@@ -178,10 +180,16 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         flow.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(Exception e) {
-                Log.w(TAG, "onFailure: Unsuccessfully requested review flow");
+                Log.w(TAG, "onFailure: Unsuccessfully launch review flow");
                 result.error("error", "Rating Failed", null);
             }
-        }).addOnCompleteListener(task -> result.success(null));
+        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                Log.w(TAG, "onComplete: Successfully launch review flow");
+                result.success(null);
+            }
+        });
     }
 
     private boolean isPlayStoreInstalled() {
