@@ -178,7 +178,8 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         flow.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(Exception e) {
-                Toast.makeText(MainActivity.this, "Rating Failed", Toast.LENGTH_SHORT).show();
+                Log.w(TAG, "onFailure: Unsuccessfully requested review flow");
+                result.error("error", "Rating Failed", null);
             }
         }).addOnCompleteListener(task -> result.success(null));
     }
